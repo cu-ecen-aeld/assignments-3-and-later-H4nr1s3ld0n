@@ -19,10 +19,11 @@ void test_validate_my_username()
      * config file and my_username() functions are setup properly
      */
 
-my_username();
-malloc_username_from_conf_file();
+const char *username = my_username();
+char *conf_username= malloc_username_from_conf_file();
 
-    TEST_ASSERT_TRUE_MESSAGE(false,"H4nr1s3ld0n");
+    TEST_ASSERT_EQUAL_STRING_MESSAGE(username,conf_username, "Does not match");
+	free(conf_username);
 }
 
 
