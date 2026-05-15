@@ -6,4 +6,4 @@ CFLAGS = -Wall -Wextra
 TARGET = writer
 SOURCE = writer.c
 
-clean = rm -f $(TARGET)
+clean = rm -f writer
