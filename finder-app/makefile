@@ -7,4 +7,6 @@ TARGET = writer
 SOURCE = writer.c
 
 clean:
-  rm -f writer
+    rm -f writer
+
+.PHONY: clean
