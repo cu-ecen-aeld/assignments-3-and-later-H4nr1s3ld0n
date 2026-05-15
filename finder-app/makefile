@@ -4,10 +4,10 @@ CC = $(CROSS_COMPILE)gcc
 CFLAGS = -Wall -Wextra
 
 TARGET = writer
-SRC := writer.c
+SRC = writer.c
 
 $(TARGET) : $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 clean:
 	rm -f $(TARGET)
