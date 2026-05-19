@@ -125,7 +125,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     va_end(args);
 	int status;
 	pid_t kidpid;
-	int fd = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
+	int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
 	if (fd < 0){ 
 		perror("open"); 
 		return false;
@@ -142,10 +142,11 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 				return false;
 			}
     		close(fd);
+			execv(command[0], command); 
+			_exit(127);
   		default:
 			close(fd);
-			execv(command[0], command); 
-			return true;
+			break;
 }
 
 	if (waitpid (kidpid, &status, 0) == -1){
