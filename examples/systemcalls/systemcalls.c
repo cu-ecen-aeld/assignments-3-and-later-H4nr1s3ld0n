@@ -117,7 +117,8 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 */
 
     va_end(args);
-	int kidpid;
+	int status;
+	pid_t kidpid;
 	int fd = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
 	if (fd < 0){ 
 		perror("open"); 
@@ -149,7 +150,5 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 	else if (WIFEXITED (status)){
 		return WEXITSTATUS (status) == 0;
 	}
-    else {
-		return false;
-	}
+	return false;
 }
