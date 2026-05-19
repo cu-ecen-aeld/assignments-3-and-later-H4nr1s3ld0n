@@ -1,4 +1,5 @@
 #include "systemcalls.h"
+#include <unistd.h>
 
 /**
  * @param cmd the command to execute with system()
@@ -116,7 +117,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 */
 
     va_end(args);
-	int = kidpid;
+	int kidpid;
 	int fd = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
 	if (fd < 0){ 
 		perror("open"); 
@@ -126,7 +127,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 	switch (kidpid) {
   		case -1: 
 			perror("fork");
-			close(fd);
+			pclose(fd);
 			return false;
 
   		case 0:
@@ -134,11 +135,11 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 				perror("dup2"); 
 				return false;
 			}
-    		close(fd);
+    		pclose(fd);
     		execv(command[0], command);
 			perror("execvp"); 
   		default:
-    		close(fd);
+    		pclose(fd);
 
 }
 
