@@ -122,13 +122,13 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 	int fd = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
 	if (fd < 0){ 
 		perror("open"); 
-		abort(); 
+		return false;
 	}
 	kidpid = fork();
 	switch (kidpid) {
   		case -1: 
 			perror("fork");
-			pclose(fd);
+			close(fd);
 			return false;
 
   		case 0:
@@ -136,11 +136,11 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 				perror("dup2"); 
 				return false;
 			}
-    		pclose(fd);
+    		close(fd);
     		execv(command[0], command);
 			perror("execvp"); 
   		default:
-    		pclose(fd);
+    		close(fd);
 
 }
 
