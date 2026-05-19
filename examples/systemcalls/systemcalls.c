@@ -17,9 +17,9 @@ bool do_system(const char *cmd)
  *   or false() if it returned a failure
 */
 
-   int rc = system(cmd);
+	int rc = system(cmd);
 
-    if(rc == -1){
+	if(rc == -1){
         return false;
     }    
     return true;
@@ -74,16 +74,16 @@ bool do_exec(int count, ...)
 	else if(pid == 0){
 		execv(command[0], command);
 		exit (-1);
-		return true;
 	}
 	if (waitpid (pid, &status, 0) == -1){
 		return false;
 	}
 	else if (WIFEXITED (status)){
 		return WEXITSTATUS (status) == 0;
-	}
-	return false; 
+	}else{
 	
+		return false; 
+	}
 }
 
 /**
@@ -116,10 +116,39 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 */
 
     va_end(args);
-	int outputfile = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
-	execv
+	int = kidpid;
+	int fd = open("redirect.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
+	if (fd < 0){ 
+		perror("open"); 
+		abort(); 
+	}
+	kidpid = fork();
+	switch (kidpid) {
+  		case -1: 
+			perror("fork");
+			close(fd);
+			return false;
 
+  		case 0:
+    		if (dup2(fd, 1) < 0) { 
+				perror("dup2"); 
+				return false;
+			}
+    		close(fd);
+    		execv(command[0], command);
+			perror("execvp"); 
+  		default:
+    		close(fd);
 
-	
-    return true;
+}
+
+	if (waitpid (kidpid, &status, 0) == -1){
+		return false;
+	}
+	else if (WIFEXITED (status)){
+		return WEXITSTATUS (status) == 0;
+	}
+    else {
+		return false;
+	}
 }
