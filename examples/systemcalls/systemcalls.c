@@ -1,5 +1,11 @@
 #include "systemcalls.h"
+#include <fcntl.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdarg.h>
 
 /**
  * @param cmd the command to execute with system()
