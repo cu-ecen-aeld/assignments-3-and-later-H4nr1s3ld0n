@@ -135,18 +135,20 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
   		case -1: 
 			perror("fork");
 			close(fd);
+			_exit(127);
 			return false;
-
   		case 0:
     		if (dup2(fd, 1) < 0) { 
-				perror("dup2"); 
+				perror("dup2");
+				_exit(127);
 				return false;
 			}
     		close(fd);
-    		execv(command[0], command);
-			perror("execvp"); 
+    		
   		default:
-    		close(fd);
+			close(fd);
+			execv(command[0], command); 
+    		_exit(127);
 
 }
 
