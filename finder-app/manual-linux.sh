@@ -12,7 +12,6 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
-COMPILER_DIR=/home/admin/compiler/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu
 
 if [ $# -lt 1 ]
 then
@@ -82,7 +81,10 @@ ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpre
 ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-cp -a ${COMPILER_DIR}/lib/*.so* ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
+cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
+cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
+
+
 
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
