@@ -81,8 +81,8 @@ ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpre
 ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
-cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
+cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib64/ 2>/dev/null 
+cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64/ 2>/dev/null 
 
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
