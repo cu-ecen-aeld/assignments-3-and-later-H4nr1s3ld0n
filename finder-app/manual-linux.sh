@@ -84,8 +84,6 @@ ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
 cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/usr/lib64/ 2>/dev/null 
 
-
-
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
 
@@ -98,7 +96,7 @@ cp /home/admin/embedded_assignments/finder-app/finder.sh ${OUTDIR}/rootfs/home/f
 cp /home/admin/embedded_assignments/conf/username.txt ${OUTDIR}/rootfs/home/username.txt
 cp /home/admin/embedded_assignments/finder-app/finder-test.sh ${OUTDIR}/rootfs/home/finder-test.sh
 cp /home/admin/embedded_assignments/conf/assignment.txt ${OUTDIR}/rootfs/home/assignment.txt
-
+cp /home/admin/embedded_assignments/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home/
 
 # TODO: Chown the root directory
 cd "${OUTDIR}/rootfs"
