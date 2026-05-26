@@ -88,14 +88,17 @@ cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
 
 # TODO: Clean and build the writer utility
-make clean writer
+cd /home/admin/embedded_assignments/finder-app
+make clean
+make CROSS_COMPILE=aarch64-none-linux-gnu- writer
+cp /home/admin/embedded_assignments/finder-app/writer ${OUTDIR}/rootfs/home/
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
-cp /home/admin/embedded_assignments/finder-app/finder.sh ${OUTDIR}/rootfs/home/finder.sh
-cp /home/admin/embedded_assignments/conf/username.txt ${OUTDIR}/rootfs/home/username.txt
-cp /home/admin/embedded_assignments/finder-app/finder-test.sh ${OUTDIR}/rootfs/home/finder-test.sh
-cp /home/admin/embedded_assignments/conf/assignment.txt ${OUTDIR}/rootfs/home/assignment.txt
+cp /home/admin/embedded_assignments/finder-app/finder.sh ${OUTDIR}/rootfs/home/
+cp /home/admin/embedded_assignments/conf/username.txt ${OUTDIR}/rootfs/home/
+cp /home/admin/embedded_assignments/finder-app/finder-test.sh ${OUTDIR}/rootfs/home/
+cp /home/admin/embedded_assignments/conf/assignment.txt ${OUTDIR}/rootfs/home/
 cp /home/admin/embedded_assignments/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home/
 
 # TODO: Chown the root directory
