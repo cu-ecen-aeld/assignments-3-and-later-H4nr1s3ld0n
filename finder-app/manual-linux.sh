@@ -103,8 +103,31 @@ cp /home/admin/embedded_assignments/conf/assignment.txt ${OUTDIR}/rootfs/home/
 cp /home/admin/embedded_assignments/finder-app/autorun-qemu.sh ${OUTDIR}/rootfs/home/
 
 # TODO: Chown the root directory
-cd "${OUTDIR}/rootfs"
-find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
+sudo chown -R root:root ${OUTDIR}/rootfs
+
+# INIT Script : the assessment does not mention it, but kernel panick if not. 
+sudo tee ${OUTDIR}/rootfs/init > /dev/null << 'EOF'
+#!/bin/sh
+# Mount essential pseudo‑filesystems needed by BusyBox and the kernel
+mount -t proc proc /proc
+mount -t sysfs sys /sys
+mount -t devtmpfs dev /dev
+
+# TODO: Run the autorun script that triggers the finder tests
+cd /home
+sh autorun-qemu.sh
+RET=$?
+
+# Log the exit code to the kernel message buffer for debugging
+echo "autorun-qemu.sh exited with code $RET" > /dev/kmsg
+
+# TODO: Always power off so QEMU exits cleanly for the autograder
+poweroff -f
+EOF
+
+sudo chmod +x ${OUTDIR}/rootfs/init
 
 # TODO: Create initramfs.cpio.gz
+cd "${OUTDIR}/rootfs"
+find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
 gzip -f "${OUTDIR}/initramfs.cpio" 
