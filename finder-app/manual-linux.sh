@@ -86,7 +86,7 @@ cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64
 
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
-sudo mknod -m 600 dev/console c 5 1
+sudo mknod -m 600 ${OUTDIR}/rootfs/dev/console c 5 1
 
 # TODO: Clean and build the writer utility
 cd /home/admin/embedded_assignments/finder-app
@@ -114,7 +114,7 @@ mount -t sysfs sys /sys
 mount -t devtmpfs dev /dev
 
 # TODO: Run the autorun script that triggers the finder tests
-cd /home
+cd ${OUTDIR}/rootfs/home
 sh autorun-qemu.sh
 RET=$?
 
