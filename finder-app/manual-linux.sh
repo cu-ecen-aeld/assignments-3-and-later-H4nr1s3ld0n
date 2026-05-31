@@ -114,8 +114,7 @@ mount -t sysfs sys /sys
 mount -t devtmpfs dev /dev
 
 # TODO: Run the autorun script that triggers the finder tests
-cd ${OUTDIR}/rootfs/home
-sh autorun-qemu.sh
+/home/autorun-qemu.sh
 RET=$?
 
 # Log the exit code to the kernel message buffer for debugging
