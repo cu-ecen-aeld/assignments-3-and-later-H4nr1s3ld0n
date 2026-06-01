@@ -12,6 +12,7 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
+SYSROOT=$(${CROSS_COMPILE}gcc -print-sysroot)
 
 if [ $# -lt 1 ]
 then
@@ -39,6 +40,8 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
 	make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} defconfig
 	make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} all
 	make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
+	echo "Copying kernel image to output directory"
+	cp ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}/Image
 fi
 
 echo "Adding the Image in outdir"
@@ -82,7 +85,10 @@ ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
 cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/ 2>/dev/null 
-cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64/ 2>/dev/null 
+cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64/ 2>/dev/null
+
+cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/
+cp -a ${SYSROOT}/lib64/*.so* ${OUTDIR}/rootfs/lib64/
 
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
