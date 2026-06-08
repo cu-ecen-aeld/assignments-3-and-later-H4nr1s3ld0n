@@ -78,17 +78,19 @@ make distclean
 make defconfig
 make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
 make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
+sudo chmod u+s ${OUTDIR}/rootfs/bin/busybox
 
 echo "Library dependencies"
 ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpreter"
 ${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-cp -a /home/admin/aarch64-none-linux-gnu/libc/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/ 2>/dev/null 
-cp -a /home/admin/aarch64-none-linux-gnu/libc/lib64/*.so* ${OUTDIR}/rootfs/lib64/ 2>/dev/null
+cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/ 2>/dev/null
+cp -a ${SYSROOT}/lib64/*.so* ${OUTDIR}/rootfs/lib64/ 2>/dev/null
 
-cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/
-cp -a ${SYSROOT}/lib64/*.so* ${OUTDIR}/rootfs/lib64/
+cp -a ${SYSROOT}/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64/ 2>/dev/null
+cp -a ${SYSROOT}/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64/ 2>/dev/null
+cp -a ${SYSROOT}/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64/ 2>/dev/null
 
 # TODO: Make device nodes
 sudo mknod -m 666 ${OUTDIR}/rootfs/dev/null c 1 3
@@ -133,6 +135,8 @@ EOF
 sudo chmod +x ${OUTDIR}/rootfs/init
 
 # TODO: Create initramfs.cpio.gz
+echo "Creating initramfs..."
 cd "${OUTDIR}/rootfs"
-find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
-gzip -f "${OUTDIR}/initramfs.cpio" 
+find . -print0 | cpio --null -ov -H newc --owner root:root > ${OUTDIR}/initramfs.cpio 2>/dev/null
+gzip -f ${OUTDIR}/initramfs.cpio
+ls -lh ${OUTDIR}/initramfs.cpio.gz
